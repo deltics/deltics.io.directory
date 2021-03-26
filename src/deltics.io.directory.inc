@@ -3,7 +3,7 @@
 
 {$debuginfo OFF}
 
-{$ifdef debug_DelticsIOFindFiles}
+{$ifdef debug_DelticsIODirectory}
   {$undef InlineMethods}
   {$debuginfo ON}
 {$endif}
