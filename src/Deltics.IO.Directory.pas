@@ -12,8 +12,8 @@ interface
 
   type
     Directory = class
-      class function OfCurrentDir: IDirectoryBuilder;
-      class function OfFolder(const aValue: String): IDirectoryBuilder;
+      class function OfCurrentDir: IDirectory;
+      class function OfFolder(const aValue: String): IDirectory;
     end;
 
 
@@ -22,20 +22,20 @@ implementation
 
   uses
     SysUtils,
-    Deltics.IO.Directory.Builder;
+    Deltics.IO.Directory.Implementation_;
 
 
 { Directory }
 
-  class function Directory.OfCurrentDir: IDirectoryBuilder;
+  class function Directory.OfCurrentDir: IDirectory;
   begin
-    result := TDirectoryBuilder.Create(GetCurrentDir);
+    result := TDirectory.Create(GetCurrentDir);
   end;
 
 
-  class function Directory.OfFolder(const aValue: String): IDirectoryBuilder;
+  class function Directory.OfFolder(const aValue: String): IDirectory;
   begin
-    result := TDirectoryBuilder.Create(aValue);
+    result := TDirectory.Create(aValue);
   end;
 
 

@@ -1,7 +1,7 @@
 
 {$i deltics.io.directory.inc}
 
-  unit Deltics.IO.Directory.Builder;
+  unit Deltics.IO.Directory.Implementation_;
 
 
 interface
@@ -16,18 +16,18 @@ interface
     PStringList = ^IStringList;
 
 
-    TDirectoryBuilder = class(TComInterfacedObject, IDirectoryBuilder,
-                                                    IDirectoryYields)
+    TDirectory = class(TComInterfacedObject, IDirectory,
+                                             IDirectoryYields)
     public // IDirectoryBuilder
-      function Filename(const aValue: String): IDirectoryBuilder;
-      function Recursive: IDirectoryBuilder; overload;
-      function Recursive(const aValue: Boolean): IDirectoryBuilder; overload;
-      function Yields: IDirectoryYields;
+      function Filename(const aValue: String): IDirectory;
+      function Recursive: IDirectory; overload;
+      function Recursive(const aValue: Boolean): IDirectory; overload;
+      function Yielding: IDirectoryYields;
       function Execute: Boolean;
     public // IDirectoryYields
-      function Count(var aCount: Integer): IDirectorybuilder;
-      function Files(var aList: IStringList): IDirectorybuilder;
-      function Folders(var aList: IStringList): IDirectorybuilder;
+      function Count(var aCount: Integer): IDirectory;
+      function Files(var aList: IStringList): IDirectory;
+      function Folders(var aList: IStringList): IDirectory;
 
     private
       // Inputs
@@ -73,7 +73,7 @@ implementation
 
 { TDirectoryBuilder }
 
-  constructor TDirectoryBuilder.Create(const aFolder: String);
+  constructor TDirectory.Create(const aFolder: String);
   begin
     inherited Create;
 
@@ -81,8 +81,9 @@ implementation
   end;
 
 
-  function TDirectoryBuilder.Execute: Boolean;
+  function TDirectory.Execute: Boolean;
   var
+    count: Integer;
     files: IStringList;
     folders: IStringList;
     FilePath: TFilePathFn;
@@ -107,6 +108,8 @@ implementation
           end
           else if Assigned(files) then
             files.Add(FilePath(aPath, rec.Name));
+
+          Inc(count);
 
         until FindNext(rec) <> 0;
 
@@ -142,8 +145,9 @@ implementation
 
   var
     i: Integer;
-    dir: String;
   begin
+    count := 0;
+
     if fFilesDest <> NIL then
     begin
       if fFilesDest^ = NIL then
@@ -165,24 +169,22 @@ implementation
     else
       FilePath := NonRecursiveFilePath;
 
-    dir := fFolder;
-
     if Length(fFilenames) > 0 then
     begin
       for i := 0 to High(fFilenames) do
-        Find(dir, fFilenames[i]);
+        Find(fFolder, fFilenames[i]);
     end
     else
-      Find(dir, '*.*');
+      Find(fFolder, '*.*');
 
     if Assigned(fCountDest) then
-      fCountDest^ := files.Count + folders.Count;
+      fCountDest^ := count;
 
-    result := (files.Count + folders.Count) > 0;
+    result := count > 0;
   end;
 
 
-  function TDirectoryBuilder.Filename(const aValue: String): IDirectoryBuilder;
+  function TDirectory.Filename(const aValue: String): IDirectory;
   var
     i: Integer;
   begin
@@ -197,41 +199,41 @@ implementation
   end;
 
 
-  function TDirectoryBuilder.Recursive: IDirectoryBuilder;
+  function TDirectory.Recursive: IDirectory;
   begin
     fRecursive := TRUE;
     result := self;
   end;
 
 
-  function TDirectoryBuilder.Recursive(const aValue: Boolean): IDirectoryBuilder;
+  function TDirectory.Recursive(const aValue: Boolean): IDirectory;
   begin
     fRecursive := aValue;
     result := self;
   end;
 
 
-  function TDirectoryBuilder.Yields: IDirectoryYields;
+  function TDirectory.Yielding: IDirectoryYields;
   begin
     result := self;
   end;
 
 
-  function TDirectoryBuilder.Count(var aCount: Integer): IDirectorybuilder;
+  function TDirectory.Count(var aCount: Integer): IDirectory;
   begin
     fCountDest := @aCount;
     result := self;
   end;
 
 
-  function TDirectoryBuilder.Files(var aList: IStringList): IDirectorybuilder;
+  function TDirectory.Files(var aList: IStringList): IDirectory;
   begin
     fFilesDest := @aList;
     result := self;
   end;
 
 
-  function TDirectoryBuilder.Folders(var aList: IStringList): IDirectorybuilder;
+  function TDirectory.Folders(var aList: IStringList): IDirectory;
   begin
     fFoldersDest := @aList;
     result := self;

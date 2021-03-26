@@ -40,9 +40,9 @@ implementation
     ogFiles := files;
 
     Directory.OfCurrentDir
-      .Yields.Count(count)
-      .Yields.Files(files)
-      .Yields.Folders(folders)
+      .Yielding.Count(count)
+      .Yielding.Files(files)
+      .Yielding.Folders(folders)
       .Execute;
 
     Test('files').Assert(files).IsAssigned;

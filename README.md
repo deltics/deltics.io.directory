@@ -10,7 +10,7 @@ Example of use:
     files: IStringList;
   begin
     Directory.OfFolder('c:\Windows')
-      .Yields.Count(files)
+      .Yielding.Count(files)
       .Execute;
 
     ..
@@ -37,7 +37,7 @@ directory:
      Directory.OfCurrentDir
        .Filename('*.mp4')
        .Filename('*.mkv')
-       .Yields.Files(movies)
+       .Yielding.Files(movies)
        .Execute;
 
      ..
@@ -59,7 +59,7 @@ the `Recursive` method on the Directory before `Execute`ing:
        .Filename('*.mp4')
        .Filename('*.mkv')
        .Recursive
-       .Yields.Files(movies)
+       .Yielding.Files(movies)
        .Execute;
 
      ..
@@ -91,8 +91,8 @@ ignored.
     filesA, filesB: IStringList;
   begin
      Directory.OfCurrentDir
-       .Yields.Files(filesA)
-       .Yields.Files(filesB)
+       .Yielding.Files(filesA)
+       .Yielding.Files(filesB)
        .Execute;
 
      // filesA is NIL
