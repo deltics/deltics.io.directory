@@ -1,0 +1,27 @@
+{
+  "id":"deltics.io.directory",
+  "version":"",
+  "summary":"A fluent framework for obtaining directory listings of files and folders in a specific folder.",
+  "tags":[
+    "deltics",
+    "file system",
+    "search"
+  ],
+  "copyright":"\u00a92020 Jolyon Direnko-Smith",
+  "language":"en",
+  "content":"source",
+  "dependencies":[
+    "deltics.inc:1.3.0",
+    "deltics.interfacedobjects:1.2.0",
+    "deltics.io.path:1.0.0",
+    "deltics.stringlists:2.0.0"
+  ],
+  "source":{
+      "files":[
+        "src\\deltics.io.directory.inc",
+        "src\\Deltics.IO.Directory.pas",
+        "src\\Deltics.IO.Directory.Interfaces.pas",
+        "src\\Deltics.IO.Directory.Implementation_.pas"
+      ]
+    }
+}
