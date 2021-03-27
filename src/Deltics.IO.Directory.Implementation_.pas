@@ -33,6 +33,7 @@ interface
       // Inputs
       fFilenames: StringArray;
       fFolder: String;
+      fHits: Integer;
       fRecursive: Boolean;
 
       // Outputs
@@ -41,6 +42,7 @@ interface
       fFoldersDest: PStringList;
     public
       constructor Create(const aFolder: String);
+      property Hits: Integer read fHits;
     end;
 
 
@@ -83,7 +85,6 @@ implementation
 
   function TDirectory.Execute: Boolean;
   var
-    count: Integer;
     files: IStringList;
     folders: IStringList;
     FilePath: TFilePathFn;
@@ -98,7 +99,7 @@ implementation
       if FindFirst(aPath + '\' + aPattern, faAnyFile, rec) = 0 then
       try
         repeat
-          if (rec.Name = '.') or (rec.Name = '..') then
+          if Path.IsNavigation(rec.Name) then
             CONTINUE;
 
           if ((rec.Attr and faDirectory) <> 0) then
@@ -109,7 +110,7 @@ implementation
           else if Assigned(files) then
             files.Add(FilePath(aPath, rec.Name));
 
-          Inc(count);
+          Inc(fHits);
 
         until FindNext(rec) <> 0;
 
@@ -146,7 +147,7 @@ implementation
   var
     i: Integer;
   begin
-    count := 0;
+    fHits := 0;
 
     if fFilesDest <> NIL then
     begin
@@ -178,9 +179,9 @@ implementation
       Find(fFolder, '*.*');
 
     if Assigned(fCountDest) then
-      fCountDest^ := count;
+      fCountDest^ := fHits;
 
-    result := count > 0;
+    result := fHits > 0;
   end;
 
 
