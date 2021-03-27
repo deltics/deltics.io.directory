@@ -21,7 +21,7 @@
         "src\\deltics.io.directory.inc",
         "src\\Deltics.IO.Directory.pas",
         "src\\Deltics.IO.Directory.Interfaces.pas",
-        "src\\Deltics.IO.Directory.Builder.pas"
+        "src\\Deltics.IO.Directory.Implementation_.pas"
       ]
     }
 }
